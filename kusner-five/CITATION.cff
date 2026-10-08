@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "Please cite the accompanying manuscript when using this work."
+type: software
+title: "Kusner's Conjecture in l1^5"
+version: "1.0.0"
+date-released: 2026-10-08
+authors:
+  - family-names: Li
+    given-names: Xiao
+preferred-citation:
+  type: unpublished
+  title: "Kusner's Conjecture in l1^5"
+  authors:
+    - family-names: Li
+      given-names: Xiao
+  year: 2026
+  month: 10
+  notes: "Preprint with accompanying Lean formalization."

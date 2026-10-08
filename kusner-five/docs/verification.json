@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-08",
+  "statement": "e(l1^5) = 10 for arbitrary real equilateral sets",
+  "final_declaration": "Kusner5.kusner_five_exact",
+  "distance_definition": "sum of the five absolute coordinate differences",
+  "upper_bound_scope": {
+    "coordinates": "real",
+    "dimension": 5,
+    "sets": "arbitrary",
+    "common_distance": "any positive real number",
+    "conclusion": "finite with cardinality at most 10"
+  },
+  "lower_bound": {
+    "cardinality": 10,
+    "common_distance": 1,
+    "points": "plus and minus one half of each coordinate basis vector"
+  },
+  "lean_version": "4.34.0",
+  "lean_revision": "293d5d0c0c3f3dded4688b3ccd6a33939ac5102b",
+  "lake_version": "5.0.0-src+293d5d0",
+  "dependency_revisions": {
+    "Cli": "e92c9f15fdfacc8536f31cfb3b7ad26c3c8cd204",
+    "LeanSearchClient": "ddf04cf3949fa556442341e87d47f9f6e6074707",
+    "Qq": "6a489d9af5d0c47e5b259e2e8bcdfc1811b5a259",
+    "aesop": "355695d523e41d0554926416cba2a2b3544fbbc9",
+    "batteries": "f2effa3d803fda822b1f97b806c47cf2adfbcbc2",
+    "importGraph": "e928b72544873815af278d38681b31c0293588e3",
+    "mathlib": "5ed2965256430c3649e86755f9576b54eca72435",
+    "plausible": "118aa17ee84656b8bd727fef7c458ee8c833385c",
+    "proofwidgets": "106ff4fafc74ef4ac99d81dbf3ab399118f497a5"
+  },
+  "build": {
+    "command": "lake --no-ansi --no-cache build",
+    "exit_code": 0,
+    "project_module_count": 25,
+    "proof_and_audit_module_count": 24,
+    "fresh_project_artifacts": true,
+    "dependency_artifacts": "pinned precompiled dependencies reused",
+    "up_to_date_check": {
+      "command": "lake --no-build build",
+      "exit_code": 0
+    }
+  },
+  "axiom_audit": {
+    "command": "python3 scripts/check_axioms.py",
+    "exit_code": 0,
+    "declaration_count": 48,
+    "literal_type_assignments": 4,
+    "allowed_axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "output": "docs/axiom-audit.txt",
+    "output_sha256": "1c910ec2cfdbc47ef276c607a309799a50b025fc8cb6b4699656a13650bf2b2f",
+    "printed_universe_annotations": "canonicalized to declaration names"
+  },
+  "lean_sources_sha256": {
+    "Kusner5.lean": "28cde9d335d439a0a00237d742be87866a375d4a373e2709ede33ad5ff4df6d0",
+    "Kusner5/Audit.lean": "cf7243f06e194ae5a211f20c23bb1f19657f1fddfe67ead2f51d136c1f7ecbda",
+    "Kusner5/Basic.lean": "7d465b1e318042a8e59350373e76599ef03fd4dec7c821538fe21b9ac908181f",
+    "Kusner5/Cardinality.lean": "9866d88f38998c5de2734104f80bd5e2524bf8f2b8a9aece05558caf728aa733",
+    "Kusner5/CutEnergy.lean": "5748b7019b91e9d677237dd5e773c6a5e322d321d15d914a806daf375959494f",
+    "Kusner5/Exclusions.lean": "ae3ba7dd2721653adadcdf8a04ddaa51c85dbc78c5ebb8fc3763ba0bca0368bd",
+    "Kusner5/ForestMatching.lean": "9dd633956c65d1df723ad1328e5892ea2e555eca29fe7991ffe8606e0fdeb8ca",
+    "Kusner5/FourMatchingAssembly.lean": "2ec297c39734527df25eddc28c066c97f4a730e0d3c6bcb0554b2cae907b9389",
+    "Kusner5/LowerWitness.lean": "7e04cf17ca3ed09a501ab4c203a453d774436f489f93678ca06fd9252c346f96",
+    "Kusner5/Main.lean": "71212aa5537a32a626ada676e1b4fb7ecb57c4609c0a535feb9da12b86401943",
+    "Kusner5/MatchingArithmetic.lean": "3a6aa04bea0ce1995c35850e1a20865e92fcf6e423a7811691f0c28184669812",
+    "Kusner5/MatchingAssembly.lean": "430ec48791109a52a8ae8c18c75efe2e94a734a3d8e4e4df742b4951ad839920",
+    "Kusner5/Orders.lean": "66451a6a1f23bc6f4f5113470498052082ad7ba79aad02350342c66f27e3cbbe",
+    "Kusner5/PathAssembly.lean": "58735347a9d5b5d38c2378c95cda815456d652d098cf959a28f5cecfb924258f",
+    "Kusner5/Profiles.lean": "245e15c278ba89fb48df85727e8ed4d902434e93f8db85711c9e81e710b7992b",
+    "Kusner5/Quartet.lean": "4df10f187fe68929e61fb9f13e37517ff0142cf6f446320054c45de52af746cf",
+    "Kusner5/QuartetBoundary.lean": "8b2478768138a4a12b0753683dd5da28fb057e82ae1fcf09c2c0d6368d6d2e1d",
+    "Kusner5/QuartetDoublePerimeter.lean": "17b5f7bffd257727d7c62582213e5225e5a8d8d6a05b0a89c91edf3a6aba6abc",
+    "Kusner5/QuartetFaceProjection.lean": "eda58049bc861b3d3a8e05a0a3f0afe3ec0c25f78a3b5c06125039188bab28b3",
+    "Kusner5/QuartetLowerBound.lean": "90030f567d45a5138b9993ceec56c645d5328904a938c39595d184349a25a67c",
+    "Kusner5/QuartetOutsiders.lean": "432adc58d03c82183f225ab1ca1a940b0b04cad8773700c6a5f05f419370a075",
+    "Kusner5/QuartetPerimeter.lean": "13f7b5dc22fe7b2a0a80c7f5331a28ffc03b77b715aed1b81930280e7c36060e",
+    "Kusner5/QuartetPhysicalSlots.lean": "586a2fb4e047b34fe6faae37bfeb67df262cd3ea54ff460bafdd44e3b743775a",
+    "Kusner5/QuartetProjection.lean": "aa5d17b05990823d8e57dcb5d3637ce0a87553e3561c31264653fd62c4a0e6ab",
+    "Kusner5/RangeGeometry.lean": "bfefe8b1bf7e8806843fca21247834dde4a886d58fbe5fa1ac0f8616377969cb"
+  },
+  "lake_manifest_sha256": "78f56fd4c5c80e4eeaa0e48cc850586ab78da85eb5f84495e9661664a16c86dc",
+  "manuscript": {
+    "title": "Kusner's Conjecture in l1^5",
+    "author": "Xiao Li",
+    "source": "paper/main.tex",
+    "source_sha256": "f84fbc6d78a8c07cb26b2dfa7883cd25440d251aabb18a5388cbab519437f759",
+    "bibliography": "paper/references.bib",
+    "bibliography_sha256": "fa4447d57247e2801f2a6f0807b631ffa6e4b40d5bd1be8330a220fa1085f20f",
+    "pdf": "paper/main.pdf",
+    "pdf_sha256": "c6995555b3488c5df19a8a3f3a9a9ef9191e18b96a959bdac8ece5358b9f9686",
+    "pdf_pages": 23,
+    "compiler": "Tectonic 0.17.0",
+    "compiler_exit_code": 0,
+    "tex_diagnostics": {
+      "overfull": 0,
+      "underfull": 0,
+      "undefined": 0,
+      "missing_character": 0
+    },
+    "complete_mathematical_review": "PASS",
+    "final_layout_diff_review": "PASS",
+    "visual_page_review_count": 23,
+    "document_information_fields": [
+      "Title",
+      "Author"
+    ],
+    "page_text_preserved_after_metadata_cleanup": true,
+    "editorial_revision": {
+      "abstract_words_before": 159,
+      "abstract_words_after": 77,
+      "counting_method": "whitespace-separated manuscript tokens",
+      "detailed_proof_outline": "Section 1",
+      "mathematical_body_unchanged": true,
+      "independent_editorial_review": "PASS"
+    }
+  }
+}

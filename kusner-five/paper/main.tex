@@ -1,0 +1,1600 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=28mm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs,longtable,array}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+\usepackage{url}
+\hypersetup{
+ pdftitle={Kusner's Conjecture in l1^5},
+ pdfauthor={Xiao Li}
+}
+\allowdisplaybreaks
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\R}{\mathbb R}
+\newcommand{\one}{\mathbf 1}
+\newcommand{\tr}{\operatorname{tr}}
+\newcommand{\dist}{\operatorname{dist}_1}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert_1}
+\newcommand{\abs}[1]{\left|#1\right|}
+\newcommand{\pos}[1]{\left(#1\right)_+}
+\newcommand{\lean}[1]{\nolinkurl{#1}}
+\DeclareMathOperator{\supp}{supp}
+\title{Kusner's Conjecture in \(\ell_1^5\)}
+\author{Xiao Li
+\thanks{Email: \href{mailto:lixiaoms@163.com}{\texttt{lixiaoms@163.com}}.}}
+\date{October 8, 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We prove Kusner's conjecture in $\ell_1^5$: every equilateral subset of real
+five-dimensional Manhattan space is finite and has at most ten elements,
+and the bound is attained. The argument combines exact energy identities
+for ordered coordinate cuts with geometric width bounds on four-point
+subsets to exclude eleven equilateral points. A Lean formalization verifies
+the theorem for arbitrary real coordinates and every positive common
+distance.
+\end{abstract}
+
+\section{Introduction and statement}
+
+For $x,y\in\R^d$, write
+\[
+ \dist(x,y)=\norm{x-y}=\sum_{k=1}^d\abs{x_k-y_k}.
+\]
+A set is equilateral if there is a real number $\delta>0$ such that
+$\dist(x,y)=\delta$ whenever $x$ and $y$ are distinct members. The
+equilateral number $e(\ell_1^d)$ is the largest possible cardinality of such
+a set. The standard coordinate construction gives $e(\ell_1^d)\geq2d$;
+the assertion that equality always holds is usually called Kusner's
+conjecture. Equilateral sets in finite-dimensional normed spaces and the
+special features of $\ell_p$ spaces are discussed in
+\cite{KLS2000,AlonPudlak2003}. Koolen, Laurent and Schrijver established
+the conjectured value in dimension four \cite{KLS2000}. The recent
+account \cite{GeXuZhou2026} still records the rectilinear equality for
+dimensions at most four. We prove the equality in dimension five.
+
+\begin{theorem}\label{thm:main}
+Let $S\subseteq\R^5$ and let $\delta>0$. If
+\[
+ \sum_{k=1}^5\abs{x_k-y_k}=\delta
+ \qquad(x,y\in S,\ x\ne y),
+\]
+then $S$ is finite and $\abs{S}\leq10$. There is a unit-equilateral set
+of ten points in $\R^5$. Consequently $e(\ell_1^5)=10$.
+\end{theorem}
+
+We prove the exclusion of eleven unit-equilateral points first. All
+coordinates in the argument are the five original scalar coordinates.
+Auxiliary clamps and projections are introduced explicitly, and their
+changes to distance are accounted for. Scalar ties and constant coordinates
+are allowed throughout.
+
+The proof has two interacting parts. Ordered scalar cuts give exact trace
+and energy identities, which force at least four coordinate ranges to
+exceed one half and restrict their extreme pairs to five possible forests.
+Four of these possibilities are excluded by explicit prefix profiles,
+leaving a matching.
+
+To exclude the remaining matching, we prove that any four original points
+have total coordinate width at least $37/24$. This bound uses the same
+seven remaining original points, signed overlaps, projections with exactly
+accounted displacement, and physical perimeters of plane sections of boxes.
+Applied to a suitable four-point subset in the matching, it couples the
+five coordinate ranges and forces positive slack away from the otherwise
+possible endpoint of the energy inequalities. The resulting contradiction
+has an explicit positive rational margin.
+
+\section{Orders, cuts, and exact energy identities}\label{sec:cuts}
+
+Suppose, for a contradiction, that $x_1,\ldots,x_{11}\in\R^5$ satisfy
+\begin{equation}\label{eq:unit}
+ \dist(x_i,x_j)=1\qquad(i\ne j).
+\end{equation}
+For coordinate $k$, choose a permutation $p_k$ of the original labels such
+that
+\[
+ x_{p_k(1),k}\leq\cdots\leq x_{p_k(11),k}.
+\]
+Any consistent order of tied entries may be used. Put
+\[
+ g_{k,r}=x_{p_k(r+1),k}-x_{p_k(r),k}\geq0,
+ \quad A_{k,r}=\{p_k(1),\ldots,p_k(r)\},
+ \quad L_k=\sum_{r=1}^{10}g_{k,r}.
+\]
+Thus $L_k$ is the actual maximum minus minimum of coordinate $k$.
+
+Let $J=\one\one^{\mathsf T}$ and $P=I-J/11$, acting on $\R^{11}$.
+Let $D_k$ be the matrix with entries $\abs{x_{i,k}-x_{j,k}}$, and define
+\[
+ C_k=-\frac12PD_kP.
+\]
+If $\chi_A$ is the indicator vector of a subset $A$, its cut matrix has
+entries $1$ precisely when one label is in $A$ and the other is not. This
+matrix is
+\[
+ \chi_A\one^{\mathsf T}+\one\chi_A^{\mathsf T}
+       -2\chi_A\chi_A^{\mathsf T}.
+\]
+The scalar distance between two ordered entries is the sum of the gaps
+whose cuts separate them. Since $P\one=0$, it follows that
+\begin{equation}\label{eq:cutmatrix}
+ C_k=\sum_{r=1}^{10}g_{k,r}
+      (P\chi_{A_{k,r}})(P\chi_{A_{k,r}})^{\mathsf T}\succeq0.
+\end{equation}
+The complete distance equations give $\sum_kD_k=J-I$ and therefore
+\begin{equation}\label{eq:operator}
+ \sum_{k=1}^5C_k=\frac12P,
+ \qquad 0\preceq C_k\preceq\frac12P,
+ \qquad\sum_{k=1}^5\tr C_k=5.
+\end{equation}
+Writing
+\[
+ w_r=\frac{r(11-r)}{11},
+\]
+we also obtain the exact trace formula
+\begin{equation}\label{eq:trace}
+ T_k:=\tr C_k=\sum_{r=1}^{10}g_{k,r}w_r,
+\end{equation}
+because $\lVert P\chi_A\rVert_2^2=\abs{A}(11-\abs{A})/11$.
+
+For later use, take any real heights $h_0,\ldots,h_{11}$ with
+$h_0=h_{11}=0$ and transport their increments to the original labels:
+\[
+ v_k(p_k(r))=h_r-h_{r-1}\qquad(1\leq r\leq11).
+\]
+Then $\sum_iv_k(i)=0$, and its sum on $A_{k,r}$ equals $h_r$. Thus
+\begin{equation}\label{eq:profile}
+ v_k^{\mathsf T}C_kv_k=\sum_{r=1}^{10}g_{k,r}h_r^2,
+ \qquad
+ v_k^{\mathsf T}\Bigl(\sum_{\ell=1}^5C_\ell\Bigr)v_k
+   =\frac12\sum_{r=1}^{11}(h_r-h_{r-1})^2.
+\end{equation}
+For a fixed profile put $a(h)=\frac12\sum_r(h_r-h_{r-1})^2$.
+Its directed cross energy is
+\begin{equation}\label{eq:crossgeneral}
+ \Delta(h):=\sum_{k=1}^5\sum_{\ell\ne k}v_k^{\mathsf T}C_\ell v_k
+ =5a(h)-\sum_{k=1}^5\sum_{r=1}^{10}g_{k,r}h_r^2.
+\end{equation}
+The sum is over ordered pairs of coordinates. Each summand is
+nonnegative. A constant scalar coordinate still has an order and a
+transported vector with the same value of $a(h)$; its own energy is zero.
+Hence constant columns are included in these identities without omission.
+
+\section{Triple geometry and the coordinate range bound}\label{sec:range}
+
+\begin{lemma}\label{lem:triple}
+For three distinct original points $a,b,c$, their coordinatewise median
+$m$ satisfies
+$\dist(a,m)=\dist(b,m)=\dist(c,m)=1/2$. Their total coordinate width is
+$3/2$.
+\end{lemma}
+
+\begin{proof}
+In each scalar coordinate, the median lies on all three pairwise intervals.
+Consequently
+$\dist(a,b)=\dist(a,m)+\dist(b,m)$, and the other two analogous
+identities hold. The three left sides are one, so each of the three
+distances to $m$ is one half. In one coordinate the sum of the three
+pairwise absolute differences is twice its maximum minus minimum.
+Summing over coordinates gives total width $3/2$.
+\end{proof}
+
+Call a coordinate \emph{wide} if $L_k>1/2$, and put
+$t_k=L_k-1/2$ for a wide coordinate. Choose its minimum and maximum
+labels $a_k,b_k$. Applying Lemma~\ref{lem:triple} to these two points and
+any other label $j$, the median in coordinate $k$ is $x_{j,k}$. Hence
+\begin{equation}\label{eq:inner}
+ x_{b_k,k}-\frac12\leq x_{j,k}\leq x_{a_k,k}+\frac12
+       \qquad(j\notin\{a_k,b_k\}).
+\end{equation}
+These bounds show that the two extreme labels are unique and that both
+outer ordered gaps are at least $t_k$. They also show that the width of
+any subset avoiding both extreme labels is at most $1-L_k$.
+For every coordinate, wide or not, we therefore have
+\begin{equation}\label{eq:outerrange}
+ L_k-\frac{g_{k,1}+g_{k,10}}2\leq\frac12.
+\end{equation}
+Indeed, in a wide column each outer gap is at least $L_k-1/2$;
+in a nonwide column the gaps are nonnegative.
+
+We require the following sharper universal range bound.
+
+\begin{proposition}\label{prop:range}
+Every original coordinate satisfies $L_k\leq5/6$. Thus every wide excess
+satisfies $0<t_k\leq1/3$.
+\end{proposition}
+
+\begin{proof}
+Only a wide coordinate needs consideration. Translate it so that its
+extreme values are $0,L$, and let $a,b$ be their labels. In the remaining
+four coordinates, translate and reflect separately so that $a$ is the
+zero vector and $b=(\ell_1,\ldots,\ell_4)$, where
+\[
+ \ell_i\geq0,\qquad \rho:=\sum_{i=1}^4\ell_i=1-L.
+\]
+For each of the nine other original points, let $u_j$ denote its selected
+scalar coordinate. Clamp its remaining coordinates to the box
+$\prod_i[0,\ell_i]$, obtaining $y_j$, and write its remainder as $w_j$.
+The coordinatewise median of $a,b,x_j$ is $(u_j,y_j)$.
+Lemma~\ref{lem:triple} gives
+\begin{equation}\label{eq:anchoredmass}
+ \norm{w_j}=\frac12,\qquad
+ \sum_i y_{j,i}=\frac12-u_j.
+\end{equation}
+
+For real numbers define their signed overlap by
+\[
+ \omega(s,t)=\frac{\abs{s}+\abs{t}-\abs{s-t}}2.
+\]
+It is the smaller absolute value when $s,t$ have the same sign, and zero
+when their signs are opposite. Set $I(v,w)=\sum_i\omega(v_i,w_i)$.
+Then
+\begin{equation}\label{eq:overlapidentity}
+ \norm{v-w}=\norm v+\norm w-2I(v,w).
+\end{equation}
+Both a scalar clamp and its remainder are monotone, and their increments
+sum to the original increment. Thus clamping splits every original
+distance exactly into the clamp distance and the remainder distance.
+Using \eqref{eq:anchoredmass} for two distinct outside labels yields
+\begin{equation}\label{eq:anchoredoverlap}
+ I(w_j,w_h)=\frac12\left(
+  \norm{y_j-y_h}+\abs{\sum_i(y_{j,i}-y_{h,i})}\right)
+ \leq\norm{y_j-y_h}.
+\end{equation}
+If $w_j,w_h$ have the same nonzero signed ray in coordinate $i$, their
+clamps have the same endpoint there. Therefore, for any set $E$ of such
+coordinates,
+\begin{equation}\label{eq:anchorpaid}
+ I(w_j,w_h)+\sum_{i\in E}\ell_i\leq\rho.
+\end{equation}
+
+Choose one label attaining the maximum remainder magnitude on each of
+the eight signed coordinate rays. There are nine labels, so some label
+$j$ was not chosen on any ray. For each nonzero coordinate of $w_j$,
+assign its ray's chosen label as owner. Group the coordinates by their
+\emph{distinct} owners; call their set $H$, and let $E_h$ be the group
+assigned to $h$. We have $h\ne j$, $\abs H\leq4$, and
+\[
+ \sum_{i\in E_h}\abs{w_{j,i}}\leq I(w_j,w_h).
+\]
+This uses actual maximum magnitudes on the same rays, so each assigned
+coordinate contributes its full magnitude to the overlap. Summing
+\eqref{eq:anchorpaid} once for each distinct owner gives
+\begin{equation}\label{eq:ownercap}
+ \frac12+\sum_{i\in\supp w_j}\ell_i\leq\abs H\rho.
+\end{equation}
+If $\abs H\leq3$, this implies $1/2\leq3\rho$. If $\abs H=4$,
+all four physical coordinates must belong to the support, so the width
+sum on the left is $\rho$ and the same conclusion follows. Thus
+$1/2\leq3(1-L)$, giving $L\leq5/6$.
+Zero box widths cause no difficulty: their remainders and their signed
+rays were retained, and their contributions to the subtracted width sum
+are simply zero.
+\end{proof}
+
+\section{Prefix profiles and wide-coordinate forests}\label{sec:forest}
+
+We now evaluate four particular profiles. Their constants will also be
+used in the later matching estimates.
+
+\subsection{Forcing at least four wide coordinates}
+
+First take the symmetric profile whose first five positive heights are
+\[
+ (h_1,h_2,h_3,h_4,h_5)
+   =\frac1{\sqrt{22}}(3,\sqrt{14},\sqrt{26},\sqrt{34},\sqrt{38}),
+ \qquad h_{11-r}=h_r.
+\]
+Its squares equal $w_r-1$ at the eight internal cuts and $w_r-1/2$
+at the two outer cuts. Expanding its increment squares gives
+\[
+ a_M=\frac{204-6\sqrt{14}-4\sqrt{91}-4\sqrt{221}-4\sqrt{323}}{22}.
+\]
+Equations~\eqref{eq:profile} and \eqref{eq:outerrange} imply
+\begin{equation}\label{eq:modifiedcap}
+ T_k\leq a_M+L_k-\frac{g_{k,1}+g_{k,10}}2
+ \leq\beta_M:=a_M+\frac12<\frac{21}{20}.
+\end{equation}
+For a nonwide coordinate use instead $h_r=\sqrt{w_r-2/3}$,
+with zero endpoint heights. Its first five heights are
+$\frac1{\sqrt{33}}(\sqrt8,\sqrt{32},\sqrt{50},\sqrt{62},\sqrt{68})$.
+Its half squared increment norm is
+\[
+ a_N=\frac{260-20\sqrt{31}-4\sqrt{1054}}{33}.
+\]
+Thus
+\begin{equation}\label{eq:nonwidecap}
+ T_k\leq a_N+\frac23L_k\leq a_N+\frac13<\frac{10}{11}
+          \qquad(L_k\leq1/2).
+\end{equation}
+All strict numerical inequalities used here and below are certified by
+rational square comparisons in Section~\ref{sec:arithmetic}.
+If there were at most three wide coordinates, then
+\[
+ 5=\sum_kT_k<3\frac{21}{20}+2\frac{10}{11}
+    =\frac{1093}{220}<5,
+\]
+where replacing a nonwide cap by a wide cap only increases the right
+side. This contradiction proves that at least four coordinates are wide.
+
+\subsection{The shifted and unshifted root profiles}
+
+For the remainder of the energy argument use
+\[
+ h_r=\sqrt{w_r-\frac12},\qquad h_0=h_{11}=0.
+\]
+The first five heights are
+$\frac1{\sqrt{22}}(3,5,\sqrt{37},3\sqrt5,7)$, followed by their
+reflection. The squared increments, in positional order, are
+\begin{equation}\label{eq:squares}
+ s_1,s_2,s_3,s_4,s_5,0,s_5,s_4,s_3,s_2,s_1,
+\end{equation}
+where
+\begin{align}\label{eq:sdefinitions}
+ s_1&=\frac9{22},&s_2&=\frac2{11},&
+ s_3&=\frac{62-10\sqrt{37}}{22},\notag\\
+ s_4&=\frac{82-6\sqrt{185}}{22},&
+ s_5&=\frac{94-42\sqrt5}{22}.
+\end{align}
+They satisfy $s_1>s_2>s_3>s_4>s_5>0$. Put
+\begin{equation}\label{eq:alpha}
+ \alpha=\sum_{i=1}^5s_i
+   =\frac{251-10\sqrt{37}-6\sqrt{185}-42\sqrt5}{22}<\frac23.
+\end{equation}
+The own-coordinate energy is $T_k-L_k/2$. Writing
+$W=\sum_kL_k$, the exact directed cross energy is consequently
+\begin{equation}\label{eq:delta}
+ \Delta=5\alpha+\frac W2-5\geq0.
+\end{equation}
+Also $T_k\leq\alpha+L_k/2$, so $W\geq10-10\alpha>10/3$.
+If
+\[
+ H=\sum_{k\text{ wide}}t_k,
+\]
+then $W\leq5/2+H$, whence
+\begin{equation}\label{eq:Hlower}
+ H>\frac56.
+\end{equation}
+
+The unshifted root profile $h_r=\sqrt{w_r}$ has half squared increment
+norm
+\begin{equation}\label{eq:alpha0}
+ \alpha_0=
+ \frac{190-12\sqrt5-24\sqrt3-8\sqrt{42}-4\sqrt{210}}{11}
+ <\frac{43}{40}.
+\end{equation}
+Its own energy is $T_k$, and its outer increment squares are $10/11$.
+Its total directed cross energy is exactly $5\alpha_0-5$.
+
+\subsection{The forest and its isolated edges}
+
+Associate to each wide coordinate the edge $\{a_k,b_k\}$ on the eleven
+original labels. No two coordinates have the same extreme pair: their
+two ranges alone would give distance greater than one for that pair.
+There is no cycle either. If a cycle uses $m$ wide edges, the variation
+of each associated scalar coordinate along the entire cycle is at least
+twice its range. Summing those $m$ coordinate variations gives more than
+$m$, although the cycle has $m$ original unit-distance edges. This is
+impossible. Thus the wide-edge graph is a simple forest.
+
+For every zero-sum vector $v$, its energy in a wide target coordinate is
+bounded below by its two outer cuts:
+\begin{equation}\label{eq:outerenergy}
+ v^{\mathsf T}C_\ell v\geq
+ t_\ell\bigl(v(a_\ell)^2+v(b_\ell)^2\bigr).
+\end{equation}
+Here the last prefix has sum $-v(b_\ell)$, explaining why both endpoint
+squares occur with the same factor $t_\ell$.
+Apply this to the unshifted root vectors. An endpoint common to the
+source row and target edge has square $10/11$. If $\deg(a)$ denotes
+degree in the wide forest, summing over the ordered source-target pairs
+gives
+\begin{equation}\label{eq:rootledger}
+ 5\alpha_0-5\geq\frac{10}{11}
+ \sum_{\ell\text{ wide}}t_\ell
+  \bigl(\deg(a_\ell)+\deg(b_\ell)-2\bigr).
+\end{equation}
+For a nonisolated edge the degree factor is at least one; for an
+isolated edge it is zero. Hence the excess sum $H_{\rm non}$ of the
+nonisolated edges satisfies
+\[
+ H_{\rm non}\leq\frac{11}{10}(5\alpha_0-5)<\frac{33}{80}.
+\]
+Together with \eqref{eq:Hlower}, this gives
+\begin{equation}\label{eq:isolatedmass}
+ H_{\rm iso}>\frac56-\frac{33}{80}=\frac{101}{240}.
+\end{equation}
+Each individual excess is at most $1/3=80/240$ by
+Proposition~\ref{prop:range}; thus there are at least two isolated edges.
+
+There are four or five wide edges. A nonisolated edge has a nonisolated
+neighbor, so there cannot be exactly one nonisolated edge. The complete
+list of possibilities is therefore
+\begin{equation}\label{eq:cases}
+ (m,i)=(4,2),(4,4),(5,2),(5,3),(5,5),
+\end{equation}
+where $m$ is the number of wide edges and $i$ the number of isolated
+ones. In $(4,2)$ and $(5,3)$ the nonisolated part is a two-edge path.
+In $(5,2)$ it is a three-edge tree: it must be connected, since two
+nontrivial components would require at least four nonisolated edges;
+it then has four vertices because it is a forest. The cases $(4,4)$
+and $(5,5)$ are matchings.
+
+\section{Excluding four of the five forest shapes}\label{sec:exclusions}
+
+We use the shifted profile of \eqref{eq:squares}. Its actual extreme
+entries have square $s_1=9/22$. The same counting as in
+\eqref{eq:rootledger} consequently yields
+\begin{equation}\label{eq:shiftednonisolated}
+ \Delta\geq\frac9{22}H_{\rm non}.
+\end{equation}
+No assertion about entries at other labels is needed for this inequality.
+
+\subsection{Two isolated edges}
+
+Suppose first that $(m,i)=(4,2)$. The two isolated excesses sum to at most
+$2/3$, so $H_{\rm non}\geq H-2/3\geq W-19/6$. The four wide ranges
+and the nonwide range satisfy $W\leq4(5/6)+1/2=23/6$. Therefore
+\[
+ \Delta\geq\frac9{22}\left(W-\frac{19}{6}\right),
+ \qquad
+ \Delta<\frac W2-\frac53
+\]
+by \eqref{eq:alpha} and \eqref{eq:delta}. The lower bound minus the
+strict upper bound is
+\[
+ \frac{49}{132}-\frac W{11}\geq\frac1{44}>0,
+\]
+a contradiction.
+
+Now suppose $(m,i)=(5,2)$. The three-edge tree has four vertices and the
+two isolated edges have four more, leaving three original labels that
+are extreme in no coordinate. Call them core labels. Their total
+coordinate width is $3/2$ by Lemma~\ref{lem:triple}. In each coordinate
+\eqref{eq:inner} bounds their width by $1-L_k$, so
+\[
+ \frac32\leq5-W,\qquad W\leq\frac72,
+ \qquad H=W-\frac52\leq1.
+\]
+Again the isolated excesses sum to at most $2/3$. Thus
+\[
+ \Delta\geq\frac9{22}\left(H-\frac23\right),
+ \qquad
+ \Delta<\frac H2-\frac5{12}.
+\]
+Their difference is $19/132-H/11\geq7/132>0$. This excludes $(5,2)$.
+
+\subsection{A finite positional estimate}\label{subsec:positions}
+
+Let $q(r)$ be the squared increment at position $r$ in
+\eqref{eq:squares}. The smallest $2,4,6,8$ entries of its eleven-entry
+multiset have respective sums
+\begin{equation}\label{eq:minimalsums}
+ M_2=s_5,\quad M_4=2s_5+s_4,\quad
+ M_6=2s_5+2s_4+s_3,\quad
+ M_8=2s_5+2s_4+2s_3+s_2.
+\end{equation}
+For any $2r$ distinct original labels their squared entries in a given
+row sum to at least $M_{2r}$. Positions remain distinct even when their
+scalar values are tied.
+
+Define
+\begin{equation}\label{eq:kappas}
+ \kappa_1=s_5,\quad \kappa_2=s_5+s_4,\quad
+ \kappa_3=s_4+s_3,\quad \kappa_4=s_3+s_2.
+\end{equation}
+Suppose $u_1\geq\cdots\geq u_r\geq0$, where $r=3$ or $4$, and
+each $u_j$ is assigned to two distinct labels, all $2r$ labels being
+distinct. If $Q_j$ is the sum of their two squared entries, then
+\begin{equation}\label{eq:pairedrearrangement}
+ \sum_{j=1}^ru_jQ_j\geq\sum_{j=1}^r\kappa_j u_j.
+\end{equation}
+Indeed, write the left side as
+\[
+ u_r\sum_{j=1}^rQ_j+
+ \sum_{a=1}^{r-1}(u_a-u_{a+1})\sum_{j=1}^aQ_j.
+\]
+Every partial sum contains $2a$ distinct positions, so it is at least
+$M_{2a}$. Substitution of \eqref{eq:minimalsums} proves
+\eqref{eq:pairedrearrangement}. This argument is a lower relaxation of
+actual indexed positions; it never chooses new scalar orders or assumes
+that independently favorable placements can be realized.
+
+We shall also need a weighted threshold version. For distinct positions
+$f(1),\ldots,f(n)$, nonnegative weights $u_j\leq M$, and $a\geq0$,
+\begin{equation}\label{eq:threshold}
+ \sum_ju_jq(f(j))\geq
+ a\sum_ju_j-M\sum_{r=1}^{11}\pos{a-q(r)}.
+\end{equation}
+To prove it, write
+\[
+ u_jq(f(j))=au_j-u_j(a-q(f(j))).
+\]
+Bound the subtracted term by $M\pos{a-q(f(j))}$, and use distinctness
+to bound the sum of these nonnegative discounts by the full positional
+sum. If one specified weight equals $S\geq M$ and all other weights are
+at most $M$, the same proof, separating the extra weight $S-M$, gives
+\begin{equation}\label{eq:onelarge}
+ \sum_ju_jq(f(j))\geq
+ a\sum_ju_j-M\sum_{r=1}^{11}\pos{a-q(r)}-(S-M)a.
+\end{equation}
+The last term is valid since $q(r)\geq0$, so every discount is at most
+$a$. Directly from \eqref{eq:squares},
+\begin{equation}\label{eq:discounts}
+ \sum_r\pos{s_3-q(r)}=5s_3-2s_4-2s_5=:D_3,
+ \quad
+ \sum_r\pos{s_4-q(r)}=3s_4-2s_5=:D_4.
+\end{equation}
+
+\subsection{The matching of four wide edges}\label{subsec:fourmatching}
+
+Suppose $(m,i)=(4,4)$, and order its wide excesses as
+$t_1\geq t_2\geq t_3\geq t_4>0$. Write $L_0\leq1/2$ for the
+remaining range. The eight extreme labels leave three core labels.
+Their width in a wide coordinate is at most $1-L_k$ and in the other
+coordinate at most $L_0$. Lemma~\ref{lem:triple} therefore gives
+\[
+ \frac32\leq\sum_{k=1}^4(1-L_k)+L_0
+      =2-H+L_0,
+ \qquad H:=\sum_{k=1}^4t_k\leq1.
+\]
+
+In each wide source row the three other edges contribute their two
+distinct endpoint positions through \eqref{eq:outerenergy}. Applying
+\eqref{eq:pairedrearrangement} with $r=3$ gives the three coefficients
+$\kappa_1,\kappa_2,\kappa_3$ in descending weight order after omitting
+that row's own edge. In the nonwide source row all four edges contribute,
+and the coefficients are $\kappa_1,\ldots,\kappa_4$. Summing these
+five actual rows gives
+\begin{equation}\label{eq:Bdefinitions}
+ \begin{split}
+ B_1&=4\kappa_1,\qquad B_2=\kappa_1+3\kappa_2,\qquad
+ B_3=2\kappa_2+2\kappa_3,\\
+ B_4&=3\kappa_3+\kappa_4,\qquad B_5=4\kappa_4,
+ \end{split}
+\end{equation}
+and
+\begin{equation}\label{eq:fourmatchinglower}
+ \Delta\geq\sum_{j=1}^4B_jt_j.
+\end{equation}
+For example, $t_2$ receives $\kappa_1$ from the first wide row,
+$\kappa_2$ from the third and fourth wide rows, and another $\kappa_2$
+from the nonwide row. This explains the ordered-row count and its factor
+three. Every edge weight has already been attached to its two original
+endpoint labels in \eqref{eq:pairedrearrangement}.
+
+The coefficients satisfy
+\begin{equation}\label{eq:Bsigns}
+ B_1<B_2<B_3<B_4<B_5,\qquad B_3<\frac{17}{64},
+ \qquad B_4<\frac12,
+ \qquad B_5+B_3>1.
+\end{equation}
+Their exact certificates are proved in Section~\ref{sec:arithmetic}.
+Since $t_1,t_2\leq1/3$ and $t_4\geq0$, increasing coefficients give
+\begin{equation}\label{eq:fourcapped}
+ \sum_{j=1}^4B_jt_j
+ \geq\frac{B_1+B_2}{3}+B_3\left(H-\frac23\right).
+\end{equation}
+For clarity, the difference between the two sides is
+\[
+ (B_3-B_1)(1/3-t_1)+(B_3-B_2)(1/3-t_2)
+      +(B_4-B_3)t_4\geq0.
+\]
+On the other hand $W=2+H+L_0\leq5/2+H$, so
+\begin{equation}\label{eq:matchingupper}
+ \Delta\leq5\alpha-\frac{15}{4}+\frac H2.
+\end{equation}
+Because $B_3<1/2$ and $H\leq1$, the difference between the lower bound
+in \eqref{eq:fourcapped} and the upper bound in
+\eqref{eq:matchingupper} is at least
+\begin{equation}\label{eq:G1}
+ G_1:=\frac{B_1+B_2+B_3}{3}-5\alpha+\frac{13}{4}
+ =\frac{-3825+260\sqrt{37}+96\sqrt{185}+420\sqrt5}{132}
+ >\frac{17549}{1650000}>0.
+\end{equation}
+This excludes the four-edge matching.
+
+\subsection{Three isolated edges and a two-edge path}\label{subsec:path}
+
+It remains in this section to exclude $(m,i)=(5,3)$. Let the three
+isolated excesses be $u_1,u_2,u_3$, with sum $U\leq1$. Write the
+path as $A$--$B$--$C$, with excesses $a,c$ and sum $S=a+c\leq2/3$.
+There are nine distinct endpoint labels: six isolated endpoints and
+the three path vertices. Each wide source row has seven other endpoint
+labels in distinct internal positions.
+
+Consider the source row belonging to edge $AB$. In the target edge
+$BC$, the shared label $B$ is one of the source row's own extremes,
+so its square is $s_1$. Its contribution is $cs_1$. The other seven
+labels have weights $u_1,u_1,u_2,u_2,u_3,u_3,c$, each at most $1/3$.
+Equation~\eqref{eq:threshold} with threshold $s_3$ bounds their
+contribution below by $s_3(2U+c)-D_3/3$. The analogous statement for
+row $BC$ has $as_1$ and $s_3(2U+a)-D_3/3$. The two path rows
+together therefore contribute at least
+\begin{equation}\label{eq:pathrows}
+ 4s_3U+(s_1+s_3)S-\frac23D_3.
+\end{equation}
+
+In the row of an isolated edge with excess $u$, the seven other labels
+have total weight $2(U-u)+2S$. The shared path vertex $B$ occurs
+\emph{once}, with weight $S=a+c$; the weights at $A,C$ are $a,c$.
+The other four weights are the endpoints of the two other isolated
+edges. If $S\leq1/3$, all seven weights are at most $1/3$, and the
+threshold-$s_4$ discount is at most $D_4/3$.
+If $S\geq1/3$, only the single shared weight can exceed $1/3$.
+Equation~\eqref{eq:onelarge} bounds the discount by
+\[
+ \frac{D_4}{3}+(S-1/3)s_4
+    =s_4S+\frac23(s_4-s_5).
+\]
+This bound holds wherever the shared label is actually positioned.
+
+Summing these three isolated rows with \eqref{eq:pathrows} gives the
+following lower bounds for the same original $\Delta$:
+\begin{align}\label{eq:pathsmall}
+ F_{\rm small}(U,S)
+ &=4(s_3+s_4)U+(s_1+s_3+6s_4)S
+       -\frac{5s_4+10s_3-10s_5}{3}
+       &&(S\leq1/3),\\
+ F_{\rm large}(U,S)
+ &=4(s_3+s_4)U+(s_1+s_3+3s_4)S
+       -\frac{2s_4+10s_3-10s_5}{3}
+       &&(S\geq1/3).\label{eq:pathlarge}
+\end{align}
+The bounds agree at $S=1/3$. Since all five coordinates are wide,
+\begin{equation}\label{eq:pathexact}
+ \Delta=5\alpha-\frac{15}{4}+\frac{U+S}{2}.
+\end{equation}
+The coefficient signs needed to compare these affine functions are
+\begin{equation}\label{eq:pathsigns}
+ 4(s_3+s_4)-\frac12<0,
+ \qquad s_1+s_3+3s_4-\frac12>0.
+\end{equation}
+In the small-$S$ case, replacing $U\leq1$ by $1$ and $S\geq0$ by
+zero can only decrease $F_{\rm small}-\Delta$. Its resulting value is
+exactly $G_1$. In the large-$S$ case, replacing $U$ by $1$ and $S$ by
+$1/3$ can only decrease $F_{\rm large}-\Delta$. Its value is
+\[
+ G_1+\frac13\left(s_1+s_3+6s_4-\frac12\right)>G_1.
+\]
+Both are positive by \eqref{eq:G1} and \eqref{eq:pathsigns},
+contradicting $\Delta\geq F$. This excludes $(5,3)$.
+
+Thus the only possible wide forest consists of five disjoint edges.
+Before excluding that matching, we establish a bound for every four-point
+subset using all seven of its remaining original labels.
+
+\section{Four original points and their seven remaining labels}\label{sec:quartet}
+
+Fix any four distinct original labels, denoted $q_0,q_1,q_2,q_3$.
+In each physical coordinate sort their four values. Its first and last
+gaps are singleton cuts, assigned respectively to the least and greatest
+label, and its middle gap is one of the three balanced two--two cuts.
+Let $b_i$ be the total singleton width assigned to $q_i$, and let
+$c_1,c_2,c_3$ be the total widths of the three balanced cuts.
+
+For complementary pairs, the balanced cuts make equal contributions.
+Subtracting their original unit-distance equations gives
+\[
+ b_0+b_1=b_2+b_3,\quad b_0+b_2=b_1+b_3,
+ \quad b_0+b_3=b_1+b_2.
+\]
+Thus $b_0=b_1=b_2=b_3=:b\geq0$. Each of the six pairs crosses
+two of the three balanced cuts. Their equations now imply
+\begin{equation}\label{eq:quartetcut}
+ c_1=c_2=c_3=:c=\frac12-b\geq0.
+\end{equation}
+The actual total coordinate width $W_Q$ of the four points is therefore
+\begin{equation}\label{eq:quartetwidth}
+ W_Q=4b+3c=\frac32+b.
+\end{equation}
+These identities also hold when a sorted gap is zero.
+
+\subsection{Clamps, signed owners, and all four cross equations}
+
+In each coordinate clamp every original point to the interval between
+the second and third selected values and subtract that interval's
+midpoint. Let its halfwidth be $\lambda_k\geq0$. Reflect the coordinate
+if necessary and assign its balanced type $\tau(k)\in\{1,2,3\}$ so
+that the selected clamps are $H_{i,\tau(k)}\lambda_k$, where
+\begin{equation}\label{eq:Hmatrix}
+ H=\begin{pmatrix}
+ 1&1&1\\1&-1&-1\\-1&1&-1\\-1&-1&1
+ \end{pmatrix},\qquad
+ H^{\mathsf T}\one=0,\quad H^{\mathsf T}H=4I_3.
+\end{equation}
+Every balanced partition of four labels is a column of this matrix,
+up to sign, so this uses only actual coordinate reflections. Coordinates
+with zero middle gap are still assigned a type. Write the resulting
+decomposition of each point as
+\[
+ x_j=y_j+w_j+\text{midpoint},
+ \qquad -\lambda_k\leq y_{j,k}\leq\lambda_k,
+\]
+with the understood coordinate reflections on the left side. They
+preserve the physical $\ell_1$ distance. As before, monotonicity of the
+clamp and its remainder gives the exact splitting
+\begin{equation}\label{eq:quartetsplit}
+ \dist(x_j,x_\ell)=\norm{y_j-y_\ell}+\norm{w_j-w_\ell}
+ \quad\text{for every original pair.}
+\end{equation}
+In particular a zero halfwidth forces $y_{j,k}=0$ but does not force
+$w_{j,k}=0$.
+
+Let $u_i=w_{q_i}$ be the four selected tails. Their masses are
+$\norm{u_i}=b$. In one coordinate only the selected least value can
+have a negative tail and only the greatest can have a positive tail.
+Thus two owners never occupy the same nonzero signed ray; opposite
+rays of one coordinate are allowed. Also
+\begin{equation}\label{eq:lambdatotal}
+ \sum_{k:\tau(k)=t}\lambda_k=\frac c2,
+ \qquad
+ \Lambda:=\sum_k\lambda_k=\frac{3c}{2}
+      =\frac34-\frac{3b}{2}.
+\end{equation}
+The norm of each selected point relative to these midpoints is
+$b+\Lambda=3/4-b/2$. This quantity differs from $\Lambda$.
+
+There are exactly seven other original labels. For each such label $j$
+define
+\[
+ A_{i,j}=I(u_i,w_j),\quad J_j=\sum_{i=0}^3A_{i,j},\quad
+ r_j=\norm{w_j},\quad
+ Q_{t,j}=\sum_{k:\tau(k)=t}y_{j,k}.
+\]
+The signed overlap of \eqref{eq:overlapidentity} satisfies
+\begin{equation}\label{eq:agreementbounds}
+ 0\leq A_{i,j}\leq b.
+\end{equation}
+In a selected clamp coordinate, the distance to an arbitrary clamp is
+$\lambda_k-H_{i,\tau(k)}y_{j,k}$. The original pair $(q_i,j)$
+therefore gives, for each of the four values of $i$,
+\begin{equation}\label{eq:crossquartet}
+ 1=b+\Lambda+r_j-(HQ_j)_i-2A_{i,j}.
+\end{equation}
+Summing these four equations, and then multiplying them by
+$H^{\mathsf T}$, yields respectively
+\begin{equation}\label{eq:outsiderequations}
+ r_j=\delta+\frac{J_j}{2},\qquad
+ Q_j=-\frac12H^{\mathsf T}A_j,
+ \qquad \delta=\frac14+\frac b2.
+\end{equation}
+Here $A_j$ is the four-entry agreement vector. Thus no equality of the
+original outsider norms has been assumed. Equations
+\eqref{eq:outsiderequations} are consequences of all four original
+cross distances.
+
+\subsection{Co-occurrence on physical signed rays}\label{subsec:cooccurrence}
+
+For two remaining labels $j,\ell$ the disjoint signed owner rays imply
+\begin{equation}\label{eq:cooccurrence}
+ I(w_j,w_\ell)\geq
+    \sum_{i=0}^3\pos{A_{i,j}+A_{i,\ell}-b}.
+\end{equation}
+Here is a coordinatewise proof that also accounts for opposite owner
+rays in a single coordinate. For nonnegative $u,a,a'$,
+\[
+ \min(u,a,a')\geq\min(u,a)+\min(u,a')-u.
+\]
+Equivalently, in signed-overlap notation, for any real $u,a,a'$,
+\[
+ \min\{\omega(u,a),\omega(u,a')\}
+ \geq\omega(u,a)+\omega(u,a')-\abs u.
+\]
+This follows because each overlap is at most $\abs u$. Sum over
+coordinates for one owner $u_i$, and use nonnegativity of the left
+side to bound it below by
+$\pos{A_{i,j}+A_{i,\ell}-\norm{u_i}}$.
+Now sum over owners. If $w_j,w_\ell$ have opposite signs in a
+coordinate, all the minima in that coordinate are zero. If they have
+the same sign, only the one possible owner on that signed ray can
+contribute, and its minimum overlap is at most
+$\omega(w_{j,k},w_{\ell,k})$. Thus no physical overlap is counted
+twice. This proves \eqref{eq:cooccurrence} using $\norm{u_i}=b$.
+
+\section{Projection with exactly accounted displacement}\label{sec:projection}
+
+\begin{lemma}\label{lem:boxprojection}
+Let $\lambda_1,\ldots,\lambda_n\geq0$ and
+$v\in\prod_i[-\lambda_i,\lambda_i]$. For every feasible sum
+$-\sum_i\lambda_i\leq T\leq\sum_i\lambda_i$ there exists a vector
+$z$ in the same box such that
+\[
+ \sum_i z_i=T,\qquad
+ \sum_i\abs{z_i-v_i}=\abs{\sum_i v_i-T}.
+\]
+In particular, the distance to the zero-sum section is exactly
+$\abs{\sum_i v_i}$.
+\end{lemma}
+
+\begin{proof}
+Write $Q=\sum_i v_i$ and $L=\sum_i\lambda_i$. If $Q=T$, take
+$z=v$. If $T<Q$, then $Q+L>0$ and
+\[
+ \theta=\frac{Q-T}{Q+L}\in[0,1],\qquad
+ z_i=(1-\theta)v_i-\theta\lambda_i
+\]
+defines a point in the box with sum $T$. Each $z_i\leq v_i$, so the
+sum of absolute changes is $Q-T$. The case $Q<T$ follows by negating
+$v,T,z$. Finally every vector with sum $T$ is at distance at least
+$\abs{Q-T}$, by the triangle inequality for the sum of coordinate
+differences. This proves exactness, including zero widths.
+\end{proof}
+
+\begin{lemma}\label{lem:faceprojection}
+Assume in addition that $n\geq2$ and all $\lambda_i>0$. If $v$ touches
+a box face, a closest projection to the zero-sum section can be chosen
+on that section's relative boundary, with the same displacement
+$\abs{\sum_i v_i}$.
+\end{lemma}
+
+\begin{proof}
+After negation we may suppose $v_i=\lambda_i$ for some $i$. Put
+$M=\sum_{h\ne i}\lambda_h$. If $\lambda_i\leq M$, keep
+$z_i=\lambda_i$ and use Lemma~\ref{lem:boxprojection} on the other
+coordinates with target sum $-\lambda_i$. Its displacement is exactly
+$\abs{\sum_h v_h}$, and $z$ still touches the $i$th face.
+If $\lambda_i>M$, take instead
+\[
+ z_i=M,\qquad z_h=-\lambda_h\quad(h\ne i).
+\]
+This vector belongs to the box, has zero sum, and is coordinatewise at
+most $v$. Also $\sum_hv_h\geq\lambda_i-M>0$, so its displacement is
+again $\abs{\sum_hv_h}$. It touches every other face. Such another
+coordinate exists and has positive width. A saturated coordinate is a
+true relative-boundary condition here: the zero vector is strictly
+inside all the box inequalities, and each coordinate functional is
+nonconstant on the zero-sum subspace when $n\geq2$.
+\end{proof}
+
+Apply Lemma~\ref{lem:boxprojection} separately to the coordinates of
+each of the three actual balanced types. For each remaining original
+label $j$ obtain $z_j$ in the physical section
+\begin{equation}\label{eq:section}
+ K=\left\{z\in\R^5:
+   \abs{z_k}\leq\lambda_k\ (1\leq k\leq5),\quad
+   \sum_{k:\tau(k)=t}z_k=0\ (t=1,2,3)\right\}.
+\end{equation}
+Its displacement is exactly
+\begin{equation}\label{eq:payment}
+ E_j:=\norm{z_j-y_j}=\sum_{t=1}^3\abs{Q_{t,j}}
+   =\frac12\sum_{t=1}^3\abs{(H^{\mathsf T}A_j)_t}.
+\end{equation}
+Zero-width coordinates of $z_j,y_j$ are zero; their original tails and
+agreements remain in \eqref{eq:outsiderequations} and
+\eqref{eq:cooccurrence}.
+
+\subsection{The eight agreement forms and the pair table}
+
+For a real four-vector $A$ let $J(A)=\sum_iA_i$, and put
+\[
+ E(A)=\frac12\left(
+ \abs{A_0+A_1-A_2-A_3}
+ +\abs{A_0-A_1+A_2-A_3}
+ +\abs{A_0-A_1-A_2+A_3}\right).
+\]
+The following exact identity is useful:
+\begin{equation}\label{eq:formidentity}
+ F(A):=\frac{J(A)}2+E(A)
+   =\max_{0\leq i\leq3}\{2A_i,\ J(A)-2A_i\}.
+\end{equation}
+To verify it, sort the four entries as $a\leq b'\leq c'\leq d$.
+The three absolute expressions are indexed by the three unordered
+balanced partitions and are therefore unchanged as a multiset by
+permuting the entries. Their half sum becomes
+\[
+ d-a+\frac12\abs{a+d-b'-c'}.
+\]
+Adding half the total gives
+$\max(2d,a+b'+c'+d-2a)$, precisely the right side of
+\eqref{eq:formidentity}. This proof includes all ties.
+
+Call $2A_i$ a plus form at index $i$ and $J(A)-2A_i$ a minus form at
+index $i$. Choose one maximizing form at each of the seven labels,
+once and for all. The coefficient vector of a plus form is $2$ at its
+index and zero elsewhere. The coefficient vector of a minus form is
+$-1$ at its index and $1$ elsewhere.
+
+For $0\leq u,v\leq b$ and real coefficients $a,d$, the function
+\[
+ au+dv-2\pos{u+v-b}
+\]
+is linear on each triangle into which $u+v=b$ divides the square.
+Checking their vertices gives the upper bound
+\begin{equation}\label{eq:slotcap}
+ au+dv-2\pos{u+v-b}
+   \leq b\max(0,a,d,a+d-2).
+\end{equation}
+For $b=0$ the assertion is immediate. For $b>0$, divide the variables
+by $b$; the four vertex values are $0,a,d,a+d-2$, which proves it.
+Apply this independently to the four agreement slots and sum. For any
+two chosen forms the resulting total cap is $b$ times the following
+number:
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+Chosen forms & Equal indices & Different indices\\
+\midrule
+plus / plus & $2$ & $4$\\
+minus / minus & $3$ & $4$\\
+plus / minus & $5$ & $4$\\
+\bottomrule
+\end{tabular}
+\end{center}
+For example, equal-index plus/minus forms have cap $2$ at their common
+index and cap $1$ at each of the other three indices, totaling $5$.
+Different-index plus/minus forms have cap $2$ at the plus index, zero
+at the minus index, and $1$ at each remaining index, totaling $4$.
+For equal-index minus/minus forms the common-index cap is zero and
+the other three caps are $1$. The other entries follow from the same
+four-vertex rule. Thus the table bounds actual forms, without any
+simultaneous-attainment assertion.
+
+From \eqref{eq:quartetsplit}, \eqref{eq:outsiderequations}, the two
+projection displacements, and \eqref{eq:cooccurrence}, we obtain
+\begin{align}\label{eq:pairprojected}
+ \norm{z_j-z_\ell}
+ &\geq1-2\delta-
+ \left(F(A_j)+F(A_\ell)
+       -2\sum_i\pos{A_{i,j}+A_{i,\ell}-b}\right)\notag\\
+ &\geq\frac12-b-b\,C(j,\ell),
+\end{align}
+where $C(j,\ell)$ is the corresponding table entry. In particular,
+\begin{equation}\label{eq:pairseparation}
+ \norm{z_j-z_\ell}\geq\frac12-6b\qquad(j\ne\ell).
+\end{equation}
+To see the first line directly, the original distance equation gives
+$\norm{y_j-y_\ell}=1-r_j-r_\ell+2I(w_j,w_\ell)$.
+Subtract $E_j+E_\ell$ by the triangle inequality and substitute
+$r_j=\delta+J_j/2$ and $E_j=E(A_j)$.
+
+\subsection{A seven-label cyclic lower bound}\label{subsec:cyclelower}
+
+In any cycle on the same seven labels, there is an edge joining forms
+of the same sign, since signs cannot alternate around an odd cycle.
+If its indices are also equal, its table cap is at most $3$; the other
+six caps are at most $5$, giving total at most $33$.
+If its indices differ, its cap is $4$. There must be a second edge
+whose indices differ: otherwise equality of indices along the other
+six edges would force equality across the first edge too. The second
+cap is also $4$, while the remaining five are at most $5$.
+Again the total is at most $33$. Summing \eqref{eq:pairprojected} proves
+\begin{equation}\label{eq:cyclelower}
+ \sum_{j\text{ in any cyclic order}}\norm{z_j-z_{j+1}}
+     \geq\frac72-40b.
+\end{equation}
+The forms are chosen per label, so the same choices work in whatever
+cyclic order is later supplied by geometry.
+
+\section{Physical boundary tours and the quartet width bound}\label{sec:perimeter}
+
+We now prove
+\begin{proposition}\label{prop:quartetbound}
+Every four-point subset of the eleven original points has
+$b\geq1/24$ and total coordinate width $W_Q\geq37/24$.
+\end{proposition}
+
+Assume for a contradiction that $b<1/24$. Then $c=1/2-b>0$, and
+each balanced type has positive total halfwidth $c/2$. Let $n_t$ be
+the number of its positive physical halfwidths. The type supports are
+disjoint and there are only five coordinates, so, after permuting the
+three types, the possibilities for $(n_1,n_2,n_3)$ are
+\begin{equation}\label{eq:allocations}
+ (1,1,1),\quad(2,1,1),\quad(3,1,1),\quad(2,2,1).
+\end{equation}
+Every zero-width slot has $z_k=0$ in the auxiliary section, irrespective
+of its original tail. The pair lower bound \eqref{eq:pairseparation}
+now gives
+\begin{equation}\label{eq:quarterseparation}
+ \norm{z_j-z_\ell}>\frac14\qquad(j\ne\ell).
+\end{equation}
+
+For $(1,1,1)$ the section $K$ is a point, contradicting
+\eqref{eq:quarterseparation}. For $(2,1,1)$ its only nonzero
+coordinates have the form $(r,-r)$, with
+$\abs r\leq A:=\min(\lambda_1,\lambda_2)$. Their physical distance
+is $2\abs{r-r'}$ and the segment diameter is $4A\leq c\leq1/2$,
+since $\lambda_1+\lambda_2=c/2$. Three ordered points on a segment
+with successive distances greater than $1/4$ would have endpoint
+distance greater than $1/2$. Three of the seven labels already give
+a contradiction. No boundary condition was used in these two cases.
+
+\subsection{A genuine positive face for every remaining label}
+
+In each of the last two allocations in \eqref{eq:allocations}, all
+five physical coordinates have positive halfwidth. This fact must be
+established before passing from a tail to an intrinsic boundary.
+If a balanced type has a single coordinate, its halfwidth is $c/2$.
+Equation~\eqref{eq:outsiderequations}, together with
+\eqref{eq:agreementbounds}, gives
+\[
+ \abs{Q_{t,j}}\leq b<\frac c2.
+\]
+Indeed each column of $H$ has two plus and two minus entries, so the
+absolute difference of the corresponding two agreement sums is at
+most $2b$. Thus a singleton type cannot carry a nonzero original tail:
+such a tail would force its clamp to an endpoint, making
+$\abs{Q_{t,j}}=c/2$.
+
+On the other hand \eqref{eq:outsiderequations} gives
+$\norm{w_j}=\delta+J_j/2>0$. Hence some actual positive-width
+coordinate of a type with at least two coordinates has a nonzero tail.
+Its clamp touches a face. Apply Lemma~\ref{lem:faceprojection} on
+the actual positive coordinates of that type, and use
+Lemma~\ref{lem:boxprojection} on the other types. The resulting
+$z_j\in K$ still has exactly the displacement \eqref{eq:payment},
+and it touches a positive face of a nonsingleton section.
+The face witness is therefore inside the active type, rather than an
+outside zero coordinate. We use these choices for the seven labels.
+
+\subsection{The two paired coordinates in each of two types}
+
+For allocation $(2,2,1)$ the section, after an actual coordinate
+permutation, consists of
+\[
+ (r,-r,s,-s,0),\qquad \abs r\leq A,\quad\abs s\leq B,
+\]
+where each of $A,B$ is the smaller of its type's two halfwidths.
+The physical metric on this rectangle is
+\begin{equation}\label{eq:pairedmetric}
+ 2\abs{r-r'}+2\abs{s-s'}.
+\end{equation}
+Each selected $z_j$ lies on a true side, by the positive-face conclusion
+above. Traversing the four literal vertices
+$(A,-A,B,-B,0)$, $(-A,A,B,-B,0)$,
+$(-A,A,-B,B,0)$, $(A,-A,-B,B,0)$ gives side lengths
+$4A,4B,4A,4B$. Since $A,B\leq c/4$, the complete tour length is
+\begin{equation}\label{eq:doubleperimeter}
+ 8(A+B)\leq4c=2-4b.
+\end{equation}
+The factors two in \eqref{eq:pairedmetric} come from two separate
+physical coordinates in each pair.
+
+\subsection{The three-coordinate plane section}
+
+For allocation $(3,1,1)$ the two singleton auxiliary coordinates are
+zero. The remaining section is the literal plane polygon
+\begin{equation}\label{eq:planesection}
+ z_1+z_2+z_3=0,\qquad
+ \abs{z_1}\leq a,\quad\abs{z_2}\leq d,\quad\abs{z_3}\leq f,
+ \qquad a+d+f=\frac c2.
+\end{equation}
+We give its physical boundary tour explicitly. On an edge with one
+coordinate fixed, the other two coordinate differences are opposites.
+Its physical distance is therefore \emph{twice} the absolute change
+of either free coordinate.
+
+If all three widths satisfy the triangle inequalities, use the six
+vertices, in order,
+\begin{equation}\label{eq:hexvertices}
+ \begin{aligned}
+ v_0&=(a,f-a,-f),& v_1&=(a,-d,d-a),\\
+ v_2&=(d-f,-d,f),& v_3&=(-a,a-f,f),\\
+ v_4&=(-a,d,a-d),& v_5&=(f-d,d,-f).
+ \end{aligned}
+\end{equation}
+They satisfy all the box inequalities. Their six edge lengths are
+\begin{equation}\label{eq:hexlengths}
+ 2(d+f-a),\ 2(a+f-d),\ 2(a+d-f),\
+ 2(d+f-a),\ 2(a+f-d),\ 2(a+d-f).
+\end{equation}
+Consequently the total physical length is $4(a+d+f)=2c$.
+Every saturated box face is exactly its corresponding segment in
+this list. For example, on $z_1=a$ the plane and box inequalities
+give $-d\leq z_2\leq f-a$, the segment from $v_1$ to $v_0$.
+For completeness the six face intervals are
+\begin{center}
+\begin{tabular}{ccc}
+\toprule
+Fixed coordinate & Free coordinate & Its interval\\
+\midrule
+$z_1=a$ & $z_2$ & $[-d,f-a]$\\
+$z_2=-d$ & $z_1$ & $[d-f,a]$\\
+$z_3=f$ & $z_1$ & $[-a,d-f]$\\
+$z_1=-a$ & $z_2$ & $[a-f,d]$\\
+$z_2=d$ & $z_1$ & $[-a,f-d]$\\
+$z_3=-f$ & $z_1$ & $[f-d,a]$\\
+\bottomrule
+\end{tabular}
+\end{center}
+The remaining coordinate is fixed by the plane equation. This verifies
+coverage of all true faces, including endpoint coincidences. If a
+triangle inequality is an equality, the corresponding edges in
+\eqref{eq:hexlengths} have zero length and are retained as constant
+segments.
+
+If a width dominates, permute the actual coordinates and suppose
+$a>d+f$. Then the plane implies $\abs{z_1}\leq d+f<a$; the
+first coordinate's original faces do not meet the section. The actual
+section is the rectangle with vertices
+\begin{equation}\label{eq:dominantvertices}
+ (d+f,-d,-f),\ (f-d,d,-f),\
+ (-d-f,d,f),\ (d-f,-d,f).
+\end{equation}
+The four physical lengths are $4d,4f,4d,4f$, summing to
+$8(d+f)\leq4(a+d+f)$. Every feasible saturated face is one of
+$z_2=\pm d$ or $z_3=\pm f$ and is covered by a displayed edge.
+This proves for every choice of nonnegative widths a closed physical
+tour covering the saturated section faces with length at most
+\begin{equation}\label{eq:tripleperimeter}
+ 4(a+d+f)=2c\leq4c=2-4b.
+\end{equation}
+The positive widths in the present allocation ensure that our selected
+face points are on its true boundary. The formulas themselves continue
+to cover zero and repeated-edge degeneracies.
+
+\subsection{Comparing the same seven-point cycle}
+
+A closed polygonal tour of physical length $P$ admits a parametrization
+$\gamma:[0,P]\longrightarrow\R^5$ with $\gamma(0)=\gamma(P)$ and
+\[
+ \norm{\gamma(t)-\gamma(s)}\leq t-s\qquad(0\leq s\leq t\leq P).
+\]
+This follows by parametrizing each nonzero straight edge by its physical
+length and keeping zero edges constant. Choose a covering parameter for
+each of the seven $z_j$ and sort these parameters. The distances between
+successive points are bounded by the successive parameter gaps; the
+closing distance is at most the sum of the two gaps through the common
+endpoint of the closed tour. Hence, in this particular cyclic order,
+\[
+ \sum_j\norm{z_j-z_{j+1}}\leq P.
+\]
+Repeated parameters cause no gap in this argument; in the present
+application they are also ruled out by
+\eqref{eq:quarterseparation}.
+
+Both allocations with five positive slots supply such a tour with
+$P\leq2-4b$, by \eqref{eq:doubleperimeter} or
+\eqref{eq:tripleperimeter}. Apply the lower bound
+\eqref{eq:cyclelower} to exactly this cyclic ordering of the same
+seven original labels. It gives
+\[
+ \frac72-40b\leq2-4b,
+ \qquad b\geq\frac1{24},
+\]
+contrary to our assumption. This completes the proof of
+Proposition~\ref{prop:quartetbound}, using
+\eqref{eq:quartetwidth} for its width conclusion.
+
+\section{The final five-edge matching}\label{sec:finalmatching}
+
+We have excluded all cases of \eqref{eq:cases} except $(5,5)$. Relabel
+the five actual coordinates so that
+\[
+ L_i=\frac12+t_i,\qquad
+ \frac13\geq t_1\geq t_2\geq t_3\geq t_4\geq t_5>0.
+\]
+Their ten extreme labels $a_i,b_i$ are all distinct, and let $o$ be
+the eleventh label. Select the original quartet
+\[
+ Q=\{o,a_5,b_5,a_4\}.
+\]
+Its width in coordinate five is $L_5$. In coordinate four it contains
+the actual minimum $a_4$, while the other three labels are nonextreme;
+\eqref{eq:inner} therefore bounds this coordinate width by $1/2$.
+In each of coordinates one, two, and three, all four labels avoid the
+two extremes, so their width is at most $1-L_i$. Applying
+Proposition~\ref{prop:quartetbound} to this same original quartet gives
+\begin{equation}\label{eq:selectedwidth}
+ \frac{37}{24}\leq W_Q
+ \leq L_5+\frac12+\sum_{i=1}^3(1-L_i)
+ =\frac72-W+2L_5+L_4.
+\end{equation}
+Its seven outsiders are exactly the seven original labels used by the
+quartet proof; no new auxiliary equilateral configuration is introduced.
+
+For the actual nonnegative cap slacks $d_i=1/3-t_i$, $1\leq i\leq4$,
+inequality \eqref{eq:selectedwidth} is equivalent to
+\begin{equation}\label{eq:slack}
+ d_1+d_2+d_3+t_5\geq\frac1{24}.
+\end{equation}
+Indeed it says $t_1+t_2+t_3-t_5\leq23/24$. The fourth slack cancels
+in this conversion, and the fifth excess has the positive sign displayed
+in \eqref{eq:slack}.
+
+In each wide source row, the other four edges contribute eight distinct
+endpoint labels. Apply \eqref{eq:pairedrearrangement} to those four
+weights in their inherited descending order and sum the five rows.
+The result is
+\begin{equation}\label{eq:finallower}
+ \Delta\geq F:=\sum_{i=1}^5B_it_i,
+\end{equation}
+with exactly the coefficients of \eqref{eq:Bdefinitions}. To check the
+ordered count explicitly, the coefficient rows, with columns indexed by
+$t_1,\ldots,t_5$, are
+\begin{equation}\label{eq:coefficientmatrix}
+ \begin{pmatrix}
+ 0&\kappa_1&\kappa_2&\kappa_3&\kappa_4\\
+ \kappa_1&0&\kappa_2&\kappa_3&\kappa_4\\
+ \kappa_1&\kappa_2&0&\kappa_3&\kappa_4\\
+ \kappa_1&\kappa_2&\kappa_3&0&\kappa_4\\
+ \kappa_1&\kappa_2&\kappa_3&\kappa_4&0
+ \end{pmatrix}.
+\end{equation}
+For example $t_3$ receives two copies of $\kappa_2$ and two of
+$\kappa_3$, and $t_5$ receives four copies of $\kappa_4$.
+The two endpoint occurrences per edge are already included in each
+$\kappa$ through \eqref{eq:minimalsums}; no further factor is inserted.
+
+All five coordinates are wide, so the exact same energy is
+\[
+ \Delta=5\alpha-\frac{15}{4}+\frac12\sum_{i=1}^5t_i.
+\]
+Substitute $t_i=1/3-d_i$ for $i\leq4$ and subtract. This gives the
+identity
+\begin{equation}\label{eq:slackidentity}
+ F-\Delta=G_4+\sum_{i=1}^4\left(\frac12-B_i\right)d_i
+                 +\left(B_5-\frac12\right)t_5,
+\end{equation}
+where
+\begin{equation}\label{eq:G4}
+ G_4:=\frac{B_1+B_2+B_3+B_4}{3}-5\alpha+\frac{37}{12}
+ =\frac{-2851+180\sqrt{37}+60\sqrt{185}+420\sqrt5}{132}.
+\end{equation}
+The constant $G_4$ need not be positive. The original quartet coupling
+\eqref{eq:slack}, rather than its sign alone, supplies the contradiction.
+
+Put $\gamma=1/2-B_3$. By \eqref{eq:Bsigns},
+\[
+ \gamma>\frac{15}{64},\qquad
+ \frac12-B_i\geq\gamma\ (i=1,2,3),\qquad
+ \frac12-B_4>0,\qquad B_5-\frac12>\gamma.
+\]
+Since all the slacks and $t_5$ are nonnegative,
+\begin{equation}\label{eq:gapfromslack}
+ F-\Delta\geq G_4+\gamma(d_1+d_2+d_3+t_5)
+       \geq G_4+\frac\gamma{24}.
+\end{equation}
+The exact radical certificate in Section~\ref{sec:arithmetic} is
+$G_4>-4349/660000$. Therefore
+\begin{equation}\label{eq:finalmargin}
+ F-\Delta>
+ -\frac{4349}{660000}+\frac{15}{64\cdot24}
+ =-\frac{4349}{660000}+\frac5{512}
+ =\frac{33541}{10560000}>0.
+\end{equation}
+This contradicts \eqref{eq:finallower}. The five-edge matching is
+impossible, and the complete forest classification proves that eleven
+original unit-equilateral points in $\R^5$ cannot exist.
+
+\section{Exact arithmetic certificates}\label{sec:arithmetic}
+
+This section supplies the numerical signs used in the proof. Every
+comparison concerns nonnegative real numbers and follows by squaring
+rational bounds. No decimal approximation is required.
+
+\subsection{The three profile bounds}
+
+For the modified profile, the following integers certify strict lower
+square-root bounds: in each row $m^2<Nd^2$, hence $\sqrt N>m/d$.
+\begin{center}
+\begin{tabular}{rrrr}
+\toprule
+$N$ & $m$ & $d$ & $Nd^2-m^2$\\
+\midrule
+$14$ & $37416$ & $10000$ & $42944$\\
+$91$ & $95393$ & $10000$ & $175551$\\
+$221$ & $148660$ & $10000$ & $204400$\\
+$323$ & $179722$ & $10000$ & $2716$\\
+\bottomrule
+\end{tabular}
+\end{center}
+Their weighted numerator is
+\[
+ 6(37416)+4(95393)+4(148660)+4(179722)=1919596.
+\]
+It follows that
+\[
+ \beta_M=\frac{215-6\sqrt{14}-4\sqrt{91}-4\sqrt{221}-4\sqrt{323}}{22}
+  <\frac{57601}{55000}<\frac{21}{20},
+\]
+as asserted in \eqref{eq:modifiedcap}.
+
+For the nonwide profile,
+\[
+ 139^2<31\cdot25^2,\qquad 1623^2<1054\cdot50^2.
+\]
+Thus $20\sqrt{31}+4\sqrt{1054}>6026/25$, and
+\[
+ a_N+\frac13
+   =\frac{271-20\sqrt{31}-4\sqrt{1054}}{33}
+   <\frac{749}{825}<\frac{10}{11}.
+\]
+
+For the unshifted root profile, the following positive differences give
+the analogous lower bounds with denominator $1000$:
+\begin{center}
+\begin{tabular}{rrr}
+\toprule
+$N$ & $m$ & $N\cdot1000^2-m^2$\\
+\midrule
+$5$ & $2236$ & $304$\\
+$3$ & $1732$ & $176$\\
+$42$ & $6480$ & $9600$\\
+$210$ & $14491$ & $10919$\\
+\bottomrule
+\end{tabular}
+\end{center}
+The weighted sum is
+$12(2236)+24(1732)+8(6480)+4(14491)=178204$.
+Consequently
+\[
+ \alpha_0<\frac{2949}{2750}<\frac{43}{40},
+\]
+which proves \eqref{eq:alpha0} and the strict isolated-mass bound.
+
+\subsection{Positive increments and their upper and lower bounds}
+
+The definitions \eqref{eq:sdefinitions} also have the useful forms
+\begin{equation}\label{eq:incrementsquares}
+ s_3=\frac{(\sqrt{37}-5)^2}{22},\qquad
+ s_4=\frac{(3\sqrt5-\sqrt{37})^2}{22},\qquad
+ s_5=\frac{(7-3\sqrt5)^2}{22}.
+\end{equation}
+The unsquared increments are positive. For the first, $\sqrt{37}>6$.
+For the second, the rational square comparisons
+\[
+ \sqrt5>\frac{559}{250},\qquad
+ \sqrt{37}<\frac{6083}{1000}
+\]
+give $3\sqrt5-\sqrt{37}>5/8$. For the third,
+$\sqrt5<7/3$. We may therefore square the following upper bounds
+without reversing a sign:
+\[
+ \sqrt{37}-5<\frac{11}{10},\qquad
+ 3\sqrt5-\sqrt{37}<\frac34,\qquad
+ 7-3\sqrt5<\frac25.
+\]
+They follow respectively from $\sqrt{37}<61/10$, from
+$\sqrt{37}>6$ and $\sqrt5<9/4$, and from $\sqrt5>11/5$.
+Equation~\eqref{eq:incrementsquares} yields
+\begin{equation}\label{eq:supper}
+ s_3<\frac{121}{2200}<\frac1{16},\qquad
+ s_4<\frac9{352}<\frac1{32},\qquad
+ s_5<\frac2{275}<\frac1{128}.
+\end{equation}
+Similarly $\sqrt{37}>121/20$ gives
+$\sqrt{37}-5>21/20$, and the second increment is greater than $5/8$.
+Thus
+\begin{equation}\label{eq:slower}
+ s_3>\frac{441}{8800}>\frac1{20},\qquad
+ s_4>\frac{25}{1408}>\frac1{60},\qquad s_5>0.
+\end{equation}
+All auxiliary root comparisons above are checked by the following
+integer inequalities, in addition to $36<37$:
+\[
+ \begin{gathered}
+ 559^2=312481<5\cdot250^2=312500,\qquad
+ 6083^2=37002889>37\cdot1000^2=37000000,\\
+ 7^2>5\cdot3^2,\quad 61^2>37\cdot10^2,\quad
+ 9^2>5\cdot4^2,\quad11^2<5\cdot5^2,\quad
+ 121^2<37\cdot20^2.
+ \end{gathered}
+\]
+The upper and lower bounds imply
+$s_1>s_2>s_3>s_4>s_5>0$. They also prove
+\eqref{eq:pathsigns}: the first coefficient is less than
+$4(1/16+1/32)-1/2=-1/8$, and the second is greater than
+$9/22+1/20+3/60-1/2=1/110$.
+
+\subsection{The shifted trace bound and matching constants}
+
+The three root bounds needed for the remaining exact constants are
+\begin{equation}\label{eq:finerooots}
+ \sqrt{37}>\frac{608276}{100000},\qquad
+ \sqrt{185}>\frac{1360147}{100000},\qquad
+ \sqrt5>\frac{223606}{100000}.
+\end{equation}
+Their square comparisons are
+\[
+ \begin{aligned}
+ 608276^2&=369999692176<370000000000,\\
+ 1360147^2&=1849999861609<1850000000000,\\
+ 223606^2&=49999643236<50000000000.
+ \end{aligned}
+\]
+For $\alpha$, their weighted numerator is
+\[
+ 10(608276)+6(1360147)+42(223606)=23635094,
+ \qquad3(23635094)=70905282>70900000.
+\]
+Thus the subtracted radical sum in \eqref{eq:alpha} exceeds $709/3$,
+giving $\alpha<2/3$.
+
+The successive differences of the coefficients in
+\eqref{eq:Bdefinitions} are
+\[
+ \begin{split}
+ B_2-B_1&=3s_4,\\
+ B_3-B_2&=2s_3+s_4-2s_5,\\
+ B_4-B_3&=s_2+2s_3-s_4-2s_5,\\
+ B_5-B_4&=3(s_2-s_4).
+ \end{split}
+\]
+They are all positive by the decreasing positive $s_i$ sequence.
+Also \eqref{eq:supper} gives
+\[
+ B_3=2(s_3+2s_4+s_5)<\frac{17}{64},\qquad
+ B_4=s_2+4s_3+3s_4<\frac{4211}{8800}<\frac12.
+\]
+Using \eqref{eq:slower},
+\[
+ B_5+B_3=4s_2+6s_3+4s_4+2s_5
+   >\frac8{11}+\frac3{10}=\frac{113}{110}>1.
+\]
+This proves all signs in \eqref{eq:Bsigns} and
+$\gamma=1/2-B_3>15/64$.
+
+Expanding $G_1$ from \eqref{eq:G1} using the $s_i$ definitions gives
+its displayed radical expression. The bounds \eqref{eq:finerooots}
+then imply
+\[
+ \begin{split}
+ 260(608276)+96(1360147)+420(223606)&=382640392,\\
+ G_1&>\frac{382640392-382500000}{13200000}
+      =\frac{17549}{1650000}>0.
+ \end{split}
+\]
+The same direct expansion gives \eqref{eq:G4}. Its lower certificate is
+\[
+ \begin{split}
+ 180(608276)+60(1360147)+420(223606)&=285013020,\\
+ G_4&>\frac{285013020-285100000}{13200000}
+      =-\frac{4349}{660000}.
+ \end{split}
+\]
+Finally the common-denominator calculation in
+\eqref{eq:finalmargin} has numerator
+$-4349\cdot16+5\cdot20625=-69584+103125=33541$ and denominator
+$10560000$. This completes all arithmetic certificates.
+
+\section{Positive distances, arbitrary sets, and the witness}\label{sec:lifting}
+
+We finish the proof of Theorem~\ref{thm:main}. If eleven distinct
+points had common distance $\delta>0$, replacing every coordinate by
+$x_k/\delta$ would give eleven unit-equilateral points, since
+\[
+ \sum_{k=1}^5\abs{\frac{x_k}{\delta}-\frac{y_k}{\delta}}
+   =\frac1\delta\sum_{k=1}^5\abs{x_k-y_k}.
+\]
+This is impossible by the preceding sections. Any finite equilateral
+set with more than ten elements contains eleven distinct elements.
+An infinite set also contains eleven distinct elements: choose
+successively a point outside the previously chosen finite subset.
+Thus an arbitrary equilateral set is finite and has at most ten
+elements. This argument places no finiteness assumption on the original
+set.
+
+For the lower bound take
+\[
+ S_{10}=\{\tfrac12 e_i,-\tfrac12 e_i:1\leq i\leq5\}.
+\]
+These are ten distinct points. Opposite points on the same coordinate
+axis have distance one. Points on different axes have two nonzero
+coordinate differences of magnitude $1/2$, again giving distance one.
+This proves the asserted witness and $e(\ell_1^5)=10$.
+
+\section{Formalization and declaration correspondence}\label{sec:formalization}
+
+The accompanying formal development uses Lean and mathlib
+\cite{Lean2021,Mathlib2020}. Points are functions from a finite set of
+coordinate indices to $\R$, and their distance is defined literally as
+the finite sum of absolute coordinate differences. Its eleven-point
+input is an arbitrary function $\{1,\ldots,11\}\to\R^5$.
+The unit-equilateral predicate quantifies over every pair of distinct
+labels, so it includes all $55$ unordered pairs.
+
+The matrix presentation in Section~\ref{sec:cuts} corresponds to scalar
+cut energies in the formal sources: on a zero-sum vector, a scalar
+column energy is the sum of its nonnegative gaps multiplied by squared
+prefix sums. The formal total-energy and total-trace identities are
+the identities \eqref{eq:operator}--\eqref{eq:profile} evaluated in
+this form. Thus the matrix notation in the paper abbreviates exactly
+the ordered scalar computation used by the formal proof.
+
+The following table identifies the main correspondence. All names are
+in the namespace \lean{Kusner5}; entries with a further namespace retain
+it in the table.
+\begingroup\small
+\setlength{\tabcolsep}{4pt}
+\begin{longtable}{>{\raggedright\arraybackslash}p{0.43\textwidth}>{\raggedright\arraybackslash}p{0.52\textwidth}}
+\toprule
+Mathematical statement & Formal declaration\\
+\midrule
+\endfirsthead
+\toprule
+Mathematical statement & Formal declaration\\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+Exact all-pair energy and trace identities &
+\lean{unit_equilateral_actual_totalEnergy};
+\lean{unit_equilateral_five_totalTrace}\\[3pt]
+The physical range bound, Proposition~\ref{prop:range} &
+\lean{actual_coordinate_range_le_five_sixths}\\[3pt]
+At least four wide coordinates and exact shifted cross energy &
+\lean{Profiles.at_least_four_wide};
+\lean{Profiles.shifted_crossEnergy}\\[3pt]
+At least two isolated edges and all five possible count cases &
+\lean{ForestMatching.original_at_least_two_isolated};
+\lean{ForestMatching.original_exhaustive_counts}\\[3pt]
+The two cases with exactly two isolated edges &
+\lean{ForestMatching.no_four_wide_two_isolated};
+\lean{ForestMatching.no_five_wide_two_isolated}\\[3pt]
+Four-edge matching and three-isolated-edge path &
+\lean{FourMatchingAssembly.no_four_matching};
+\lean{PathAssembly.no_five_wide_three_isolated}\\[3pt]
+Quartet cut totals, original overlap, and all four cross equations &
+\lean{quartet_equal_cut_totals};
+\lean{quartet_original_cooccurrence};
+\lean{quartet_original_cross_equation}\\[3pt]
+Actual projection and positive active-face projection &
+\lean{exists_original_quartet_projection};
+\lean{exists_original_quartet_face_projection}\\[3pt]
+Physical slot classification and the same seven-label lower cycle &
+\lean{original_quartet_positive_slot_classification};
+\lean{original_projected_seven_cycle_lower}\\[3pt]
+The two physical boundary tours and cyclic upper bound &
+\lean{exists_original_113_section_tour};
+\lean{exists_original_122_section_tour};
+\lean{QuartetGeometry.seven_cycle_of_closed_path}\\[3pt]
+Arbitrary original quartet width, Proposition~\ref{prop:quartetbound} &
+\lean{original_quartet_singleton_ge_one_twenty_fourth};
+\lean{original_quartet_width_ge_thirty_seven_twenty_fourths}\\[3pt]
+Five actual matching rows and the selected quartet slack &
+\lean{MatchingAssembly.original_five_matching_energy_lower};
+\lean{MatchingAssembly.matching_original_slack}\\[3pt]
+Eleven-point unit-distance exclusion, with the literal expanded input &
+\lean{no_eleven_unit}; \lean{no_eleven_unit_explicit}\\[3pt]
+Positive-distance normalization and finite-array bound &
+\lean{no_eleven_positive_distance};
+\lean{equilateral_array_card_le_ten}\\[3pt]
+Arbitrary-set finiteness and cardinality bound &
+\lean{equilateral_set_finite_card_le_ten}\\[3pt]
+The ten-point witness and complete exact result &
+\lean{exists_equilateral_ten}; \lean{kusner_five_exact}\\
+\end{longtable}
+\endgroup
+
+In particular, the fully expanded eleven-point theorem has the
+mathematical type
+\[
+ \forall x:\{1,\ldots,11\}\to\R^5,\quad
+ \neg\left(\forall i\ne j,\ \sum_{k=1}^5\abs{x_{i,k}-x_{j,k}}=1\right).
+\]
+The final exact theorem combines the arbitrary-set, arbitrary-positive-
+distance upper bound with the explicit finite ten-point lower witness.
+The arbitrary-quartet lower bound is proved from the original
+configuration before it is supplied to the final matching argument;
+it is not an additional hypothesis of the final theorem.
+
+The development reuses mathlib's real-number, finite-sum, finite-set,
+sorting, and square-root results. The project declarations and their
+composition are kernel-checked, and the transitive axiom inspection of
+the central and final declarations yields only the standard foundations
+\lean{propext}, \lean{Classical.choice}, and \lean{Quot.sound}.
+All numerical certificates above are represented by exact arithmetic
+proofs. No unproved mathematical axiom or admitted proof is used.
+This verification statement concerns the supplied formal development
+with its declared library dependencies.
+
+\section*{Acknowledgement}
+Large language model (LLM)-based tools assisted with the research and preparation of this manuscript.
+
+\bibliographystyle{plain}
+\bibliography{references}
+
+\end{document}
